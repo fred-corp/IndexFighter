@@ -58,9 +58,12 @@ class DynamicsHandler:
         puckAngle = -puckAngle
 
       # Calculate the new Puck Angle on bounce with player 1 position and angle, considering the puck size
+      # TODO: flip first and second point
       player1StartCoord = self.coordsPlayer1[0]
-      player1EndCoord = self.coordsPlayer1[1]
-      player1Angle = self.coordsPlayer1[3]
+      x1 = int(player1StartCoord[0] + self.coordsPlayer2[2] * np.cos(self.coordsPlayer1[1]))
+      y1 = int(player1StartCoord[1] + self.coordsPlayer2[2] * np.sin(self.coordsPlayer1[1]))
+      player1EndCoord = [x1, y1]
+      player1Angle = self.coordsPlayer1[2]
       player1NormalAngle = player1Angle + np.pi/2
       if puckCoords[0] - puckSize < player1EndCoord[0] and puckCoords[0] + puckSize > player1StartCoord[0] and puckCoords[1] - puckSize < player1EndCoord[1] and puckCoords[1] + puckSize > player1StartCoord[1]:
         # Calculate the new Puck Angle
@@ -69,9 +72,11 @@ class DynamicsHandler:
 
       # Calculate the new Puck Angle on bounce with player 2 position and angle, considering the puck size
       player2StartCoord = self.coordsPlayer2[0]
-      player2EndCoord = self.coordsPlayer2[1]
-      player2Angle = self.coordsPlayer2[3]
-      player2NormalAngle = player2Angle - np.pi/2
+      x2 = int(player2StartCoord[0] + self.coordsPlayer2[2] * np.cos(self.coordsPlayer2[1]))
+      y2 = int(player2StartCoord[1] + self.coordsPlayer2[2] * np.sin(self.coordsPlayer2[1]))
+      player2EndCoord = [x2, y2]
+      player2Angle = self.coordsPlayer2[2]
+      player2NormalAngle = player2Angle + np.pi/2
       if puckCoords[0] - puckSize < player2EndCoord[0] and puckCoords[0] + puckSize > player2StartCoord[0] and puckCoords[1] - puckSize < player2EndCoord[1] and puckCoords[1] + puckSize > player2StartCoord[1]:
         # Calculate the new Puck Angle
         puckAngle = -puckAngle + 2 * player2NormalAngle

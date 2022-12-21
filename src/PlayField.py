@@ -16,29 +16,31 @@ class PlayField:
     if drawPlayers:
       # Draw a line of thickness 5 and length 60 with the same starting point
       # as the 1st coord of player 1, and same angle as the coords of player 1 on the black
-      P1angle = coordsPlayer1[3]
-      cv2.line(black, tuple(coordsPlayer1[0]), tuple(coordsPlayer1[1]), (0, 255, 0), 5)
+      P1angle = coordsPlayer1[1]
+      x1 = int(coordsPlayer1[0][0] + coordsPlayer1[2] * np.cos(P1angle))
+      y1 = int(coordsPlayer1[0][1] + coordsPlayer1[2] * np.sin(P1angle))
+      cv2.line(black, tuple(coordsPlayer1[0]), (x1, y1), (0, 255, 0), 5)
 
       # Draw a line of thickness 5 and length 60 with the same starting point
       # as the 1st coord of player 2, and same angle as the coords of player 2 on the black
-      P2angle = coordsPlayer2[3]
-      cv2.line(black, tuple(coordsPlayer2[0]), tuple(coordsPlayer2[1]), (0, 0, 255), 5)
+      P2angle = coordsPlayer2[1]
+      x2 = int(coordsPlayer2[0][0] - coordsPlayer2[2] * np.cos(P2angle))
+      y2 = int(coordsPlayer2[0][1] - coordsPlayer2[2] * np.sin(P2angle))
+      cv2.line(black, tuple(coordsPlayer2[0]), (x2, y2), (0, 0, 255), 5)
 
-    if drawPlayerVector:
+    if drawPlayerVector and drawPlayers:
       # Draw a line of thickness 2 and length 40 in the middle the 1st coord and endCoord of player 1 on the black,
       # Perpendicular to the line between the 1st coord and endCoord of player 1
-      P1angle = coordsPlayer1[3]
       vectorLength = 40
       # start coord between the 1st coord and endCoord of player 1
-      startCoord = [int((coordsPlayer1[0][0] + coordsPlayer1[1][0])/2), int((coordsPlayer1[0][1] + coordsPlayer1[1][1])/2)]
+      startCoord = [int((coordsPlayer1[0][0] + x1)/2), int((coordsPlayer1[0][1] + y1)/2)]
       endCoord = [int(startCoord[0] + vectorLength * np.cos(P1angle - np.pi/2)), int(startCoord[1] + vectorLength * np.sin(P1angle - np.pi/2))]
       cv2.line(black, tuple(startCoord), tuple(endCoord), (0, 255, 0), self.puckVectorThickness)
 
       # Draw a line of thickness 2 and length 40 between the 1st coord and endCoord of player 2 on the black
-      P2angle = coordsPlayer2[3]
       vectorLength = 40
       # start coord between the 1st coord and endCoord of player 2
-      startCoord = [int((coordsPlayer2[0][0] + coordsPlayer2[1][0])/2), int((coordsPlayer2[0][1] + coordsPlayer2[1][1])/2)]
+      startCoord = [int((coordsPlayer2[0][0] + x2)/2), int((coordsPlayer2[0][1] + y2)/2)]
       endCoord = [int(startCoord[0] + vectorLength * np.cos(P2angle - np.pi/2)), int(startCoord[1] + vectorLength * np.sin(P2angle - np.pi/2))]
       cv2.line(black, tuple(startCoord), tuple(endCoord), (0, 0, 255), self.puckVectorThickness)
 
@@ -50,7 +52,7 @@ class PlayField:
       coordsPuck[0] = [int(coordsPuck[0][0]), int(coordsPuck[0][1])]
       cv2.circle(black, tuple(coordsPuck[0]), puckSize, puckColor, -1)
     
-    if drawPuckVector:
+    if drawPuckVector and drawPuck:
       # Draw the Puck Vector on the black rectangle
       puckVectorColor = (0, 0, 255)
       puckSpeed = coordsPuck[2]

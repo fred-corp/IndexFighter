@@ -13,8 +13,8 @@ class CameraHandler:
     self.mp_hands = mp.solutions.hands
     self.cam = cam = cv2.VideoCapture(camNum)
     self.stopped = True
-    self.coordsPlayer1 = [[1, 2], [3, 4], 80, 0]
-    self.coordsPlayer2 = [[1279, 2], [1277, 4], 80, 0]
+    self.coordsPlayer1 = [[1, 2], np.pi/4, 80]
+    self.coordsPlayer2 = [[1279, 2], -np.pi/4, 80]
     self.image = np.zeros((int(self.imShape[0]), int(self.imShape[1]), 3), np.uint8)
     self.fieldShape = fieldShape
     self.camLock = Lock()
@@ -32,19 +32,20 @@ class CameraHandler:
 
         return
 
-      coordsPlayer1 = self.coordsPlayer1
-      coordsPlayer2 = self.coordsPlayer2
+      with self.camLock:
+        coordsPlayer1 = self.coordsPlayer1.copy()
+        coordsPlayer2 = self.coordsPlayer2.copy()
       pTime = 0
       cTime = 0
 
       x1p1 = coordsPlayer1[0][0]
       y1p1 = coordsPlayer1[0][1]
-      x2p1 = coordsPlayer1[1][0]
-      y2p1 = coordsPlayer1[1][1]
+      x2p1 = int(coordsPlayer1[0][0] + coordsPlayer1[2] * np.cos(coordsPlayer1[1]))
+      y2p1 = int(coordsPlayer1[0][1] + coordsPlayer1[2] * np.sin(coordsPlayer1[1]))
       x1p2 = coordsPlayer2[0][0]
       y1p2 = coordsPlayer2[0][1]
-      x2p2 = coordsPlayer2[1][0]
-      y2p2 = coordsPlayer2[1][1]
+      x2p2 = int(coordsPlayer2[0][0] + coordsPlayer2[2] * np.cos(coordsPlayer2[1]))
+      y2p2 = int(coordsPlayer2[0][1] + coordsPlayer2[2] * np.sin(coordsPlayer2[1]))
 
       with self.mp_hands.Hands(
       model_complexity=0,
@@ -75,8 +76,6 @@ class CameraHandler:
           image.flags.writeable = True
           image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
-          _coordsPlayer1 = self.coordsPlayer1
-          _coordsPlayer2 = self.coordsPlayer2
           if results.multi_hand_landmarks:
             for hand_landmarks in results.multi_hand_landmarks:
               self.mp_drawing.draw_landmarks(
@@ -125,9 +124,7 @@ class CameraHandler:
               P1angle = 0
             if x2p1 < x1p1:
               P1angle += np.pi
-            x2 = int(_coordsPlayer1[0][0] + np.cos(P1angle) * self.coordsPlayer1[2])
-            y2 = int(_coordsPlayer1[0][1] + np.sin(P1angle) * self.coordsPlayer1[2])
-            coordsPlayer1 = [[x1p1, y1p1], [x2, y2], self.coordsPlayer1[2], P1angle]
+            coordsPlayer1 = [[x1p1, y1p1], P1angle, coordsPlayer1[2]]
 
             # Calculate P2 angle
             if x1p2 != x2p2:
@@ -136,9 +133,7 @@ class CameraHandler:
               P2angle = 0
             if x2p2 < x1p2:
               P2angle += np.pi
-            x2 = int(_coordsPlayer2[0][0] + np.cos(P2angle) * self.coordsPlayer2[2])
-            y2 = int(_coordsPlayer2[0][1] + np.sin(P2angle) * self.coordsPlayer2[2])
-            coordsPlayer2 = [[x1p2, y1p2], [x2, y2], self.coordsPlayer2[2], P2angle]
+            coordsPlayer2 = [[x1p2, y1p2], P2angle+np.pi, coordsPlayer2[2]]
 
             cTime = time.time()
             fps = 1 / (cTime - pTime)
@@ -160,7 +155,9 @@ class CameraHandler:
     return self.stopped
 
   def getCoords(self):
-    return self.coordsPlayer1, self.coordsPlayer2
+    with self.camLock:
+      return self.coordsPlayer1, self.coordsPlayer2
 
   def getImage(self):
-    return self.image
+    with self.camLock:
+      return self.image

@@ -26,7 +26,7 @@ def startGame(playerNum = 1):
   
   while True:
     coordsPlayer1, coordsPlayer2 = camHandler.getCoords()
-    playfield = playField.getField(coordsPlayer1, coordsPlayer2, coordsPuck)
+    playfield = playField.getField(coordsPlayer1, coordsPlayer2, coordsPuck, drawPuck=False)
     dynamicsHandler.updatePlayerCoords(coordsPlayer1, coordsPlayer2)
     coordsPuck = dynamicsHandler.getPuckCoords()
     cv2.imshow("Image", camHandler.getImage())
