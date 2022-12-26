@@ -161,3 +161,8 @@ class CameraHandler:
   def getImage(self):
     with self.camLock:
       return self.image
+
+
+if __name__ == "__main__":
+  print("Camera handler for IndexFighter")
+  print("Nothing to do here !")

@@ -110,3 +110,8 @@ class DynamicsHandler:
     # convert the coords to int
     puckCoords = [int(self.coordsPuck[0][0]), int(self.coordsPuck[0][1])]
     return [puckCoords, self.coordsPuck[1], self.coordsPuck[2], self.coordsPuck[3]]
+
+
+if __name__ == "__main__":
+  print("Dynamics handler for IndexFighter")
+  print("Nothing to do here !")

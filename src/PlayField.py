@@ -78,3 +78,7 @@ class PlayField:
     cv2.rectangle(black, (int(self.fieldShape[1]/2 - 2), self.borderY), (int(self.fieldShape[1]/2 + 2), self.fieldShape[0] - self.borderY - 1), (255, 0, 0), -1)
     return black
 
+
+if __name__ == "__main__":
+  print("Playfield utils for IndexFighter")
+  print("Nothing to do here !")
