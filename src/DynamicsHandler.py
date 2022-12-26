@@ -60,8 +60,18 @@ class DynamicsHandler:
       # Calculate the new Puck Angle on bounce with border, considering the puck size
       if newPuckCoords[0] - puckSize < self.borderX or newPuckCoords[0] + puckSize > self.fieldShape[1] - self.borderX:
         puckAngle = np.pi - puckAngle
+        # If the puck is inside the border, move it to the border
+        if newPuckCoords[0] - puckSize < self.borderX:
+          newPuckCoords[0] = self.borderX + puckSize
+        elif newPuckCoords[0] + puckSize > self.fieldShape[1] - self.borderX:
+          newPuckCoords[0] = self.fieldShape[1] - self.borderX - puckSize
       if newPuckCoords[1] - puckSize < self.borderY or newPuckCoords[1] + puckSize > self.fieldShape[0] - self.borderY:
         puckAngle = -puckAngle
+        # If the puck is inside the border, move it to the border
+        if newPuckCoords[1] - puckSize < self.borderY:
+          newPuckCoords[1] = self.borderY + puckSize
+        elif newPuckCoords[1] + puckSize > self.fieldShape[0] - self.borderY:
+          newPuckCoords[1] = self.fieldShape[0] - self.borderY - puckSize
 
       if self.doPlayer1Collide:
         # Calculate the new Puck Angle on bounce with player 1 position and angle, considering the puck size
