@@ -1,11 +1,16 @@
-# IndexFighter
+<h1 align="center">IndexFighter</h1>
 
-Like air hockey, but with your indexes !
+<p align="center">
+	<img width="200" height="200" margin-right="100%" src="https://github.com/fred-corp/IndexFighter/raw/main/images/icon/index%20fighter.png">
+</p>
 
-[![CodeQL](https://github.com/fred-corp/IndexFighter/actions/workflows/codeql.yml/badge.svg)](https://github.com/fred-corp/IndexFighter/actions/workflows/codeql.yml)
-[![GitHub license](https://img.shields.io/github/license/fred-corp/indexFighter)](https://github.com/fred-corp/IndexFighter/blob/main/LICENCE)
-[![GitHub issues](https://img.shields.io/github/issues/fred-corp/indexFighter)](https://github.com/fred-corp/IndexFighter/issues)
-[![GitHub last commit](https://img.shields.io/github/last-commit/fred-corp/indexFighter)](https://github.com/fred-corp/IndexFighter/commits/main)
+<p align="center">Like air hockey, but with your indexes !</p>
+<p align="center">
+<a href="https://github.com/fred-corp/IndexFighter/actions/workflows/codeql.yml"><img src="https://github.com/fred-corp/IndexFighter/actions/workflows/codeql.yml/badge.svg"></a>
+<a href="https://github.com/fred-corp/IndexFighter/blob/main/LICENCE"><img src="https://img.shields.io/github/license/fred-corp/indexFighter"></a>
+<a href="https://github.com/fred-corp/IndexFighter/issues"><img src="https://img.shields.io/github/issues/fred-corp/indexFighter"></a>
+<a href="https://github.com/fred-corp/IndexFighter/commits/main"><img src="https://img.shields.io/github/last-commit/fred-corp/indexFighter"></a>
+</p>
 
 ## Table of contents
 
@@ -43,7 +48,7 @@ Players can control paddle position and angle on their player side.
 ### Hand tracking
 
 The hand tracking is done with [mediapipe](https://pypi.org/project/mediapipe/), which is a python library containing a lot of machine learning models for computer vision. This simplifies the development of the game, as I didn't have to train my own models.
- 
+
 ### Multiplayer
 
 > TODO: Develop details here
