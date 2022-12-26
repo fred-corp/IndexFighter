@@ -18,6 +18,8 @@ class DynamicsHandler:
     self.lock = Lock()
     self.doPlayer1Collide = True
     self.doPlayer2Collide = True
+    self.bounce1 = False
+    self.bounce2 = False
   
   def start(self):
     self.stopped = False
@@ -75,36 +77,60 @@ class DynamicsHandler:
 
       if self.doPlayer1Collide:
         # Calculate the new Puck Angle on bounce with player 1 position and angle, considering the puck size
-        # TODO: Solve collision issue
+        # TODO: Solve collision issue when ball is behind player
         player1StartCoord = self.coordsPlayer1[0]
-        x1 = int(player1StartCoord[0] - self.coordsPlayer2[2] * np.cos(self.coordsPlayer1[1]))
-        y1 = int(player1StartCoord[1] - self.coordsPlayer2[2] * np.sin(self.coordsPlayer1[1]))
+        player1Angle = self.coordsPlayer1[1]
+        x1 = int(player1StartCoord[0] + self.coordsPlayer1[2] * np.cos(player1Angle))
+        y1 = int(player1StartCoord[1] + self.coordsPlayer1[2] * np.sin(player1Angle))
+        if x1 == player1StartCoord[0]:
+          x1 += 1
         player1EndCoord = [x1, y1]
-        player1Angle = self.coordsPlayer1[2]
-        player1NormalAngle = player1Angle + np.pi/2
-        if puckCoords[0] - puckSize < player1EndCoord[0] and puckCoords[0] + puckSize > player1StartCoord[0] and puckCoords[1] - puckSize < player1EndCoord[1] and puckCoords[1] + puckSize > player1StartCoord[1]:
+
+        # calculate the distance between the puck and the line between the player
+        dist = np.abs(((newPuckCoords[0] - player1StartCoord[0]) * (player1EndCoord[1] - player1StartCoord[1])) - ((newPuckCoords[1] - player1StartCoord[1]) * (player1EndCoord[0] - player1StartCoord[0])) / np.sqrt((player1EndCoord[1] - player1StartCoord[1])**2 + (player1EndCoord[0] - player1StartCoord[0])**2))
+        
+        # if the puck coords gets between the player coords with a tolerance of the ball radius, bounce
+        if dist <= puckSize and not self.bounce1:
+          print("Player 1 Collision")
           # Calculate the new Puck Angle
-          puckAngle = -puckAngle + 2 * player1NormalAngle
-          # TODO: Calculate the new Puck Speed
+          puckAngle = 2 * player1Angle - puckAngle
+          self.bounce1 = True
+        elif dist > puckSize and self.bounce1:
+          print("Player 1 Collision End")
+          self.bounce1 = False
+
+        # TODO: Calculate the new Puck Speed
 
       if self.doPlayer2Collide:
         # Calculate the new Puck Angle on bounce with player 2 position and angle, considering the puck size
+        # TODO: Solve collision issue when ball is behind player
         player2StartCoord = self.coordsPlayer2[0]
-        x2 = int(player2StartCoord[0] + self.coordsPlayer2[2] * np.cos(self.coordsPlayer2[1]))
-        y2 = int(player2StartCoord[1] + self.coordsPlayer2[2] * np.sin(self.coordsPlayer2[1]))
+        player2Angle = self.coordsPlayer2[1]
+        x2 = int(player2StartCoord[0] - self.coordsPlayer2[2] * np.cos(player2Angle))
+        y2 = int(player2StartCoord[1] - self.coordsPlayer2[2] * np.sin(player2Angle))
+        if x2 == player2StartCoord[0]:
+          x2 += 1
         player2EndCoord = [x2, y2]
-        player2Angle = self.coordsPlayer2[2]
-        player2NormalAngle = player2Angle + np.pi/2
-        if puckCoords[0] - puckSize < player2EndCoord[0] and puckCoords[0] + puckSize > player2StartCoord[0] and puckCoords[1] - puckSize < player2EndCoord[1] and puckCoords[1] + puckSize > player2StartCoord[1]:
+
+        # calculate the distance between the puck and the line between the player
+        dist = np.abs(((newPuckCoords[0] - player2StartCoord[0]) * (player2EndCoord[1] - player2StartCoord[1])) - ((newPuckCoords[1] - player2StartCoord[1]) * (player2EndCoord[0] - player2StartCoord[0])) / np.sqrt((player2EndCoord[1] - player2StartCoord[1])**2 + (player2EndCoord[0] - player2StartCoord[0])**2))
+
+        # if the puck coords gets between the player coords with a tolerance of the ball radius, bounce
+        if dist <= puckSize and not self.bounce2:
           # Calculate the new Puck Angle
-          puckAngle = -puckAngle + 2 * player2NormalAngle
-          # TODO: Calculate the new Puck Speed
+          puckAngle = 2 * player2Angle - puckAngle
+          self.bounce2 = True
+        elif dist > puckSize and self.bounce2:
+          self.bounce2 = False
+
+        # TODO: Calculate the new Puck Speed
 
       # Update the puck coords, speed and angle
       with self.lock:
         self.coordsPuck[0] = newPuckCoords
         self.coordsPuck[2] = int(puckSpeed)
         self.coordsPuck[3] = puckAngle
+      time.sleep(0.001)
 
   def getPuckCoords(self):
     # convert the coords to int
