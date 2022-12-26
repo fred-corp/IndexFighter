@@ -8,6 +8,7 @@ class PlayField:
     self.borderColor = (255, 255, 255)
     self.puckVectorThickness = 2
     self.fieldShape = fieldShape
+    self.backGroundColor = (38, 38, 38)
     self.backGround = self.generateBackGround()
 
   def getField(self, coordsPlayer1, coordsPlayer2, coordsPuck, drawPlayers=True, drawPlayerVector=True, drawPuck = True, drawPuckVector = True):
@@ -71,9 +72,9 @@ class PlayField:
     black = np.zeros((self.fieldShape[0], self.fieldShape[1], 3), np.uint8)
     # Draw a N px wide white border around the black rectangle
     black[:] = self.borderColor
-    black[self.borderY:-self.borderY, self.borderX:-self.borderX] = (0, 0, 0)
+    black[self.borderY:-self.borderY, self.borderX:-self.borderX] = self.backGroundColor
 
-    # Draw a blue rectangle of width 4 in the middle of the black rectangle
-    cv2.rectangle(black, (self.fieldShape[1]//2-2, 0), (self.fieldShape[1]//2+2, self.fieldShape[0]), (255, 0, 0), 4)
+    # Draw a blue rectangle of width 4 in the middle of the black rectangle inside of the borderY
+    cv2.rectangle(black, (int(self.fieldShape[1]/2 - 2), self.borderY), (int(self.fieldShape[1]/2 + 2), self.fieldShape[0] - self.borderY - 1), (255, 0, 0), -1)
     return black
 
