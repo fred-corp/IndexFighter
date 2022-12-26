@@ -2,6 +2,11 @@
 
 Like air hockey, but with your indexes !
 
+[![CodeQL](https://github.com/fred-corp/IndexFighter/actions/workflows/codeql.yml/badge.svg)](https://github.com/fred-corp/IndexFighter/actions/workflows/codeql.yml)
+[![GitHub license](https://img.shields.io/github/license/fred-corp/indexFighter)](https://github.com/fred-corp/IndexFighter/blob/main/LICENCE)
+[![GitHub issues](https://img.shields.io/github/issues/fred-corp/indexFighter)](https://github.com/fred-corp/IndexFighter/issues)
+[![GitHub last commit](https://img.shields.io/github/last-commit/fred-corp/indexFighter)](https://github.com/fred-corp/IndexFighter/commits/main)
+
 ## Table of contents
 
 - [Table of contents](#table-of-contents)
