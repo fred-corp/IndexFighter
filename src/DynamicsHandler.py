@@ -57,22 +57,22 @@ class DynamicsHandler:
       if newPuckCoords[0] - puckSize < self.borderX and newPuckCoords[1] > self.fieldShape[0]/2 - self.goalHeight/2 and newPuckCoords[1] < self.fieldShape[0]/2 + self.goalHeight/2:
         with self.lock:
           self.player2.score += 1
-          self.player2.service = True
-          self.player1.service = False
+          self.player2.service = False
+          self.player1.service = True
           self.bounce1 = False
           self.bounce2 = False
-          self.coordsPuck = [[640, 360], 20, 250, np.pi]
+          self.coordsPuck = [[640, 360], 20, 250, 0]
         continue
 
       # Detect collision with goal on right side
       if newPuckCoords[0] + puckSize > self.fieldShape[1] - self.borderX and newPuckCoords[1] > self.fieldShape[0]/2 - self.goalHeight/2 and newPuckCoords[1] < self.fieldShape[0]/2 + self.goalHeight/2:
         with self.lock:
           self.player1.score += 1
-          self.player1.service = True
-          self.player2.service = False
+          self.player1.service = False
+          self.player2.service = True
           self.bounce1 = False
           self.bounce2 = False
-          self.coordsPuck = [[640, 360], 20, 250, 0]
+          self.coordsPuck = [[640, 360], 20, 250, np.pi]
         continue
 
       # Calculate the new Puck Angle on bounce with border, considering the puck size
