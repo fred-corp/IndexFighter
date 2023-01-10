@@ -14,13 +14,14 @@ def startGame(debug=0):
   borderX = 80
   borderY = 50
   friction = 1
+  goalHeight = 300
   fieldShape = (720, 1280)
   #coordsPuck = [[640, 360], 20, 250, np.pi/4]
   coordsPuck = [[640, 360], 20, 100, 0]
 
   camHandler = CameraHandler(fieldShape)
   camHandler.start()
-  playField = PlayField(fieldShape, borderX, borderY)
+  playField = PlayField(fieldShape, borderX, borderY, goalHeight)
   player1 = Player()
   player2 = Player()
 

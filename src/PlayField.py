@@ -2,21 +2,27 @@ import cv2
 import numpy as np
 
 class PlayField:
-  def __init__(self, fieldShape, borderX, borderY):
+  def __init__(self, fieldShape, borderX, borderY, goalHeight):
     self.borderX = borderX
     self.borderY = borderY
     self.borderColor = (255, 255, 255)
     self.puckVectorThickness = 2
     self.fieldShape = fieldShape
+    self.goalHeight = goalHeight
     self.backGroundColor = (38, 38, 38)
     self.backGround = self.generateBackGround()
 
-  def getField(self, player1, player2, coordsPuck, drawPlayers=True, drawPlayerVector=False, drawPuck = True, drawPuckVector = False):
+  def getField(self, player1, player2, coordsPuck, drawScore = True, drawPlayers=True, drawPlayerVector=False, drawPuck = True, drawPuckVector = False):
     black = self.backGround.copy()
 
     coordsPlayer1 = player1.getParams()
     coordsPlayer2 = player2.getParams()
     
+    if drawScore:
+      # Draw the score
+      cv2.putText(black, str(player1.score), (int(self.fieldShape[1]/2 - 100), 40), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 255, 0), 2, cv2.LINE_AA)
+      cv2.putText(black, str(player2.score), (int(self.fieldShape[1]/2 + 100), 40), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 0, 255), 2, cv2.LINE_AA)
+
     if drawPlayers:
       # Draw a line of thickness 5 and length 60 with the same starting point
       # as the 1st coord of player 1, and same angle as the coords of player 1 on the black
@@ -79,6 +85,14 @@ class PlayField:
 
     # Draw a blue rectangle of width 4 in the middle of the black rectangle inside of the borderY
     cv2.rectangle(black, (int(self.fieldShape[1]/2 - 2), self.borderY), (int(self.fieldShape[1]/2 + 2), self.fieldShape[0] - self.borderY - 1), (255, 0, 0), -1)
+
+    # Draw the goals on each side of the field
+    goalWidth = 5
+    goalColor = (0, 127, 255)
+    # Draw the left goal
+    cv2.rectangle(black, (self.borderX, int(self.fieldShape[0]/2 - self.goalHeight/2)), (self.borderX - goalWidth, int(self.fieldShape[0]/2 + self.goalHeight/2)), goalColor, -1)
+    # Draw the right goal
+    cv2.rectangle(black, (self.fieldShape[1] - self.borderX + goalWidth, int(self.fieldShape[0]/2 - self.goalHeight/2)), (self.fieldShape[1] - self.borderX, int(self.fieldShape[0]/2 + self.goalHeight/2)), goalColor, -1)
     return black
 
 
