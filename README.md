@@ -40,26 +40,33 @@ Players can control paddle position and angle on their player side.
 
 - **Hand tracking** : the game must be playable with only hand tracking, no other input device
 - **Multiplayer** : the game must be playable by two players on the same computer
-- **Real-time** : the game must be playable in real-time, with a low latency
 - **Dynamics** : the game should handle realistic dynamics like friction, bounce angle, speed of attack, etc.
+- **Real-time** : the game must be playable in real-time, with a low latency
 
 ## Strategy
 
 ### Hand tracking
 
-The hand tracking is done with [mediapipe](https://pypi.org/project/mediapipe/), which is a python library containing a lot of machine learning models for computer vision. This simplifies the development of the game, as I didn't have to train my own models.
+The hand marker recognition is done with [mediapipe](https://pypi.org/project/mediapipe/), which is a python library containing a lot of machine learning models for computer vision. This simplifies the development of the game, as I didn't have to train my own models.
 
 ### Multiplayer
 
-> TODO: Develop details here
+The game is played by two players controlling the position and angle of a paddle each. The game is played on a single computer with a single camera. Player A has the left side of the camera field to control their paddle, and player B has the right side of the camera field.
+
+### Dynamics
+
+The dynamics of the game, namely the bouncing of the puck on the borders and paddles, are handled by the `DynamicsHandler` class.  
+This class calculates the new ball parameters (angle and speed) should a collision occur.
 
 ### Real-time
 
-> TODO: Develop details here
-
 The game is written in python, and uses Threading to run the game logic and the hand tracking in parallel.
 
-### Dynamics
+The `CameraHandler` class is responsible for the hand tracking. It runs a thread for the live hand tracking to decouple the tracking from the rest of the game code to make it run a bit smoother, and has getter functions for retrieving the player positions and angles.
+
+The `DynamicsHandler` class is responsible for the game logic. It runs a thread for the game dynamics to render it independent of the hand tracking performance and thus be more precise, and has getter functions for retrieving the ball position and angle.
+
+### Rendering
 
 > TODO: Develop details here
 
@@ -69,7 +76,12 @@ The game is written in python, and uses Threading to run the game logic and the 
 
 ## Further development ideas
 
-> TODO: Develop details here
+The project could be expanded by performing the following changes :
+
+- Fix collision bugs : Sometimes, the puck collision with the paddles is not detected. This may be due to the fact that the collision detection is done with a simple distance calculation, and the puck can pass through the paddle without being detected.
+- "Online multiplayer" : The players would be able to play on their own computer, provided they both have a camera and a computer. This would require a server to handle the game logic and hand tracking, and a client to display the game and send the hand tracking data to the server.
+- Implement speed and friction : Like real air hockey, the puck should react to the speed of the paddles, and decelerate due to the friction of the playfield.
+- Add a "power-up" system : The game could have power-ups that would affect the game dynamics, like a "speed boost" or a "slow down" power-up.
 
 ## Acknowledgements
 
