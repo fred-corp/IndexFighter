@@ -31,7 +31,7 @@
 
 ## Demo
 
-<p  align="center"><img width="200" height="200" src="images/Demo.gif"></p>
+<p  align="center"><img width="400" height="400" src="images/Demo.gif"></p>
 
 > A 500x500 video is available [here](images/Demo.mov)
 
