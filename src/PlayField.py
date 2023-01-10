@@ -20,8 +20,8 @@ class PlayField:
     
     if drawScore:
       # Draw the score
-      cv2.putText(black, str(player1.score), (int(self.fieldShape[1]/2 - 100), 40), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 255, 0), 2, cv2.LINE_AA)
-      cv2.putText(black, str(player2.score), (int(self.fieldShape[1]/2 + 100), 40), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 0, 255), 2, cv2.LINE_AA)
+      cv2.putText(black, str(player1.score), (int(self.fieldShape[1]/2 - 100), 40), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 0, 0), 2, cv2.LINE_AA)
+      cv2.putText(black, str(player2.score), (int(self.fieldShape[1]/2 + 100), 40), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 0, 0), 2, cv2.LINE_AA)
 
     if drawPlayers:
       # Draw a line of thickness 5 and length 60 with the same starting point
