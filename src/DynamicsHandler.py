@@ -3,7 +3,7 @@ import time
 from threading import Thread, Lock
 
 class DynamicsHandler:
-  def __init__(self, fieldShape, friction, borderX, borderY, player1, player2, coordsPuck):
+  def __init__(self, fieldShape, friction, borderX, borderY, goalHeight, player1, player2, coordsPuck):
     self.fieldShape = fieldShape
     self.player1 = player1
     self.player2 = player2
@@ -11,6 +11,7 @@ class DynamicsHandler:
     self.friction = friction
     self.borderX = borderX
     self.borderY = borderY
+    self.goalHeight = goalHeight
     self.stopped = True
     self.prevTime = time.time()
     self.lock = Lock()
@@ -52,7 +53,27 @@ class DynamicsHandler:
       # Calculate the new Puck Coords
       newPuckCoords = [puckCoords[0] + puckSpeed*timeDiff * np.cos(puckAngle), puckCoords[1] + puckSpeed*timeDiff * np.sin(puckAngle)]
       
-      
+      # Detect collision with goal on left side
+      if newPuckCoords[0] - puckSize < self.borderX and newPuckCoords[1] > self.fieldShape[0]/2 - self.goalHeight/2 and newPuckCoords[1] < self.fieldShape[0]/2 + self.goalHeight/2:
+        with self.lock:
+          self.player2.score += 1
+          self.player2.service = True
+          self.player1.service = False
+          self.bounce1 = False
+          self.bounce2 = False
+          self.coordsPuck = [[640, 360], 20, 250, np.pi]
+        continue
+
+      # Detect collision with goal on right side
+      if newPuckCoords[0] + puckSize > self.fieldShape[1] - self.borderX and newPuckCoords[1] > self.fieldShape[0]/2 - self.goalHeight/2 and newPuckCoords[1] < self.fieldShape[0]/2 + self.goalHeight/2:
+        with self.lock:
+          self.player1.score += 1
+          self.player1.service = True
+          self.player2.service = False
+          self.bounce1 = False
+          self.bounce2 = False
+          self.coordsPuck = [[640, 360], 20, 250, 0]
+        continue
 
       # Calculate the new Puck Angle on bounce with border, considering the puck size
       if newPuckCoords[0] - puckSize < self.borderX or newPuckCoords[0] + puckSize > self.fieldShape[1] - self.borderX:

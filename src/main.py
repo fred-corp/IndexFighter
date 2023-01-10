@@ -16,8 +16,7 @@ def startGame(debug=0):
   friction = 1
   goalHeight = 300
   fieldShape = (720, 1280)
-  #coordsPuck = [[640, 360], 20, 250, np.pi/4]
-  coordsPuck = [[640, 360], 20, 100, 0]
+  coordsPuck = [[640, 360], 20, 250, np.pi/4]
 
   camHandler = CameraHandler(fieldShape)
   camHandler.start()
@@ -28,7 +27,7 @@ def startGame(debug=0):
   coordsPlayer1, coordsPlayer2 = camHandler.getCoords()
   player1.setParams(coordsPlayer1)
   player2.setParams(coordsPlayer2)
-  dynamicsHandler = DynamicsHandler(fieldShape, friction, borderX, borderY, player1, player2, coordsPuck)
+  dynamicsHandler = DynamicsHandler(fieldShape, friction, borderX, borderY, goalHeight, player1, player2, coordsPuck)
   # Debug
   # dynamicsHandler.enableCollisions(player1=True, player2=False)
   dynamicsHandler.start()
