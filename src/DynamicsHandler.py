@@ -86,12 +86,10 @@ class DynamicsHandler:
         
         # if the puck coords gets between the player coords with a tolerance of the ball radius, bounce
         if dist <= puckSize and not self.bounce1:
-          print("Player 1 Collision")
           # Calculate the new Puck Angle
           puckAngle = 2 * player1Angle - puckAngle
           self.bounce1 = True
         elif dist > puckSize and self.bounce1:
-          print("Player 1 Collision End")
           self.bounce1 = False
 
         # TODO:[Future version] Calculate the new Puck Speed (considering the player speed)
