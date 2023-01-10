@@ -11,7 +11,7 @@ class PlayField:
     self.backGroundColor = (38, 38, 38)
     self.backGround = self.generateBackGround()
 
-  def getField(self, player1, player2, coordsPuck, drawPlayers=True, drawPlayerVector=True, drawPuck = True, drawPuckVector = True):
+  def getField(self, player1, player2, coordsPuck, drawPlayers=True, drawPlayerVector=False, drawPuck = True, drawPuckVector = False):
     black = self.backGround.copy()
 
     coordsPlayer1 = player1.getParams()
