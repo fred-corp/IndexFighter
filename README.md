@@ -15,17 +15,25 @@
 ## Table of contents
 
 - [Table of contents](#table-of-contents)
+- [Demo](#demo)
 - [How to play](#how-to-play)
 - [What is it ?](#what-is-it-)
 - [Key challenges](#key-challenges)
 - [Strategy](#strategy)
   - [Hand tracking](#hand-tracking)
   - [Multiplayer](#multiplayer)
-  - [Real-time](#real-time)
   - [Dynamics](#dynamics)
+  - [Real-time](#real-time)
+  - [Rendering](#rendering)
 - [Results](#results)
 - [Further development ideas](#further-development-ideas)
 - [Acknowledgements](#acknowledgements)
+
+## Demo
+
+<p  align="center"><img width="200" height="200" src="images/Demo.gif"></p>
+
+> A 500x500 video is available [here](images/Demo.mov)
 
 ## How to play
 
