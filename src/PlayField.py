@@ -11,8 +11,11 @@ class PlayField:
     self.backGroundColor = (38, 38, 38)
     self.backGround = self.generateBackGround()
 
-  def getField(self, coordsPlayer1, coordsPlayer2, coordsPuck, drawPlayers=True, drawPlayerVector=True, drawPuck = True, drawPuckVector = True):
+  def getField(self, player1, player2, coordsPuck, drawPlayers=True, drawPlayerVector=True, drawPuck = True, drawPuckVector = True):
     black = self.backGround.copy()
+
+    coordsPlayer1 = player1.getParams()
+    coordsPlayer2 = player2.getParams()
     
     if drawPlayers:
       # Draw a line of thickness 5 and length 60 with the same starting point

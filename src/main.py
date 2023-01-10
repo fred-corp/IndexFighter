@@ -3,13 +3,14 @@ import sys
 from CameraHandler import *
 from PlayField import *
 from DynamicsHandler import *
+from Player import *
 
 dynLock = Lock()
 
 
 
 def startGame(debug=0):
-  _debug = debug == 1
+  _debug = (debug == 1)
   borderX = 80
   borderY = 50
   friction = 1
@@ -20,17 +21,23 @@ def startGame(debug=0):
   camHandler = CameraHandler(fieldShape)
   camHandler.start()
   playField = PlayField(fieldShape, borderX, borderY)
+  player1 = Player()
+  player2 = Player()
 
   coordsPlayer1, coordsPlayer2 = camHandler.getCoords()
-  dynamicsHandler = DynamicsHandler(fieldShape, friction, borderX, borderY, coordsPlayer1, coordsPlayer2, coordsPuck)
+  player1.setParams(coordsPlayer1)
+  player2.setParams(coordsPlayer2)
+  dynamicsHandler = DynamicsHandler(fieldShape, friction, borderX, borderY, player1, player2, coordsPuck)
   # Debug
   # dynamicsHandler.enableCollisions(player1=True, player2=False)
   dynamicsHandler.start()
   
   while True:
     coordsPlayer1, coordsPlayer2 = camHandler.getCoords()
-    playfield = playField.getField(coordsPlayer1, coordsPlayer2, coordsPuck)
-    dynamicsHandler.updatePlayerCoords(coordsPlayer1, coordsPlayer2)
+    player1.setParams(coordsPlayer1)
+    player2.setParams(coordsPlayer2)
+    playfield = playField.getField(player1, player2, coordsPuck)
+    dynamicsHandler.updatePlayerCoords(player1, player2)
     coordsPuck = dynamicsHandler.getPuckCoords()
     if _debug:
       cv2.imshow("Image", camHandler.getImage())
@@ -45,5 +52,5 @@ def startGame(debug=0):
 
 
 if __name__ == '__main__':
-  startGame(sys.argv[1] if len(sys.argv) > 1 else 0)
+  startGame(debug = sys.argv[1] if len(sys.argv) > 1 else 0)
   print("Done")

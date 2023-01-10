@@ -3,10 +3,10 @@ import time
 from threading import Thread, Lock
 
 class DynamicsHandler:
-  def __init__(self, fieldShape, friction, borderX, borderY, coordsPlayer1, coordsPlayer2, coordsPuck):
+  def __init__(self, fieldShape, friction, borderX, borderY, player1, player2, coordsPuck):
     self.fieldShape = fieldShape
-    self.coordsPlayer1 = coordsPlayer1
-    self.coordsPlayer2 = coordsPlayer2
+    self.player1 = player1
+    self.player2 = player2
     self.coordsPuck = coordsPuck
     self.friction = friction
     self.borderX = borderX
@@ -33,9 +33,9 @@ class DynamicsHandler:
     self.doPlayer1Collide = player1
     self.doPlayer2Collide = player2
 
-  def updatePlayerCoords(self, coordsPlayer1, coordsPlayer2):
-    self.coordsPlayer1 = coordsPlayer1
-    self.coordsPlayer2 = coordsPlayer2
+  def updatePlayerCoords(self, player1, player2):
+    self.player1 = player1
+    self.player2 = player2
 
   def calcPuckCoord(self):
     while not self.stopped:
@@ -73,10 +73,10 @@ class DynamicsHandler:
       if self.doPlayer1Collide:
         # Calculate the new Puck Angle on bounce with player 1 position and angle, considering the puck size
         # TODO: Solve collision issue (collision is sometimes not detected)
-        player1StartCoord = self.coordsPlayer1[0]
-        player1Angle = self.coordsPlayer1[1]
-        x1 = int(player1StartCoord[0] + self.coordsPlayer1[2] * np.cos(player1Angle))
-        y1 = int(player1StartCoord[1] + self.coordsPlayer1[2] * np.sin(player1Angle))
+        player1StartCoord = [self.player1.coordX, self.player1.coordY]
+        player1Angle = self.player1.angle
+        x1 = int(player1StartCoord[0] + self.player1.size * np.cos(player1Angle))
+        y1 = int(player1StartCoord[1] + self.player1.size * np.sin(player1Angle))
         if x1 == player1StartCoord[0]:
           x1 += 1
         player1EndCoord = [x1, y1]
@@ -99,10 +99,10 @@ class DynamicsHandler:
       if self.doPlayer2Collide:
         # Calculate the new Puck Angle on bounce with player 2 position and angle, considering the puck size
         # TODO: Solve collision issue (collision is sometimes not detected)
-        player2StartCoord = self.coordsPlayer2[0]
-        player2Angle = self.coordsPlayer2[1]
-        x2 = int(player2StartCoord[0] - self.coordsPlayer2[2] * np.cos(player2Angle))
-        y2 = int(player2StartCoord[1] - self.coordsPlayer2[2] * np.sin(player2Angle))
+        player2StartCoord = [self.player2.coordX, self.player2.coordY]
+        player2Angle = self.player2.angle
+        x2 = int(player2StartCoord[0] - self.player2.size * np.cos(player2Angle))
+        y2 = int(player2StartCoord[1] - self.player2.size * np.sin(player2Angle))
         if x2 == player2StartCoord[0]:
           x2 += 1
         player2EndCoord = [x2, y2]
