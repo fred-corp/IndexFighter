@@ -34,6 +34,7 @@
 <p  align="center"><img width="400" height="400" src="images/Demo.gif"></p>
 
 > A 500x500 video is available [here](images/Demo.mov)
+> The low framerate and resolution is due to the space saving in order to keep the repo size small.
 
 ## How to run
 
@@ -109,8 +110,8 @@ It does not have its own thread so the playfield is asked to be generated render
 
 ## Results
 
-The code works, yay !  
-There are some issues where some collisions with the paddles are not detected, or stray collisions that seem to happen randomly anywhere the playfield. This could be fixed by refactoring and optimizing the code.
+The code works, yay ! The main objectives were attained, and the game is playable.  
+There are still some issues where some collisions with the paddles are not detected, or stray collisions that seem to happen randomly anywhere the playfield. This could be fixed by refactoring and optimizing the code.
 
 ## Further development ideas
 
