@@ -60,7 +60,7 @@ python src/main.py
 > python3.10 src/main.py
 > ```
 
-You can add a debug argument to show the webcam image by adding a `1` at the end of the command :
+You can add a debug argument to show the webcam feed by adding a `1` at the end of the command :
 
 ```sh
 python src/main.py 1
