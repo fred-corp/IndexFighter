@@ -10,13 +10,14 @@ dynLock = Lock()
 
 
 def startGame(debug=0):
-  _debug = (debug == 1)
+  _debug = int(debug) == 1
   borderX = 80
   borderY = 50
   friction = 1
   goalHeight = 300
   fieldShape = (720, 1280)
-  coordsPuck = [[640, 360], 20, 250, np.pi/4]
+  coordsPuck = [[640, 360], 20, 0, np.pi/4]
+  startDelay = 30
 
   camHandler = CameraHandler(fieldShape)
   camHandler.start()
@@ -31,8 +32,13 @@ def startGame(debug=0):
   # Debug
   # dynamicsHandler.enableCollisions(player1=True, player2=False)
   dynamicsHandler.start()
-  
+  time0 = time.time()
+  started = False
   while True:
+    # wait 10 seconds before releasing the puck
+    if time.time() - time0 > startDelay and started == False:
+      dynamicsHandler.setPuckCoords([[640, 360], 20, 250, np.pi/4])
+      started = True
     coordsPlayer1, coordsPlayer2 = camHandler.getCoords()
     player1.setParams(coordsPlayer1)
     player2.setParams(coordsPlayer2)
