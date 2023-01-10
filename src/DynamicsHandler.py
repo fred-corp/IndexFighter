@@ -7,8 +7,6 @@ class DynamicsHandler:
     self.fieldShape = fieldShape
     self.coordsPlayer1 = coordsPlayer1
     self.coordsPlayer2 = coordsPlayer2
-    self.prevCoordsPlayer1 = coordsPlayer1
-    self.prevCoordsPlayer2 = coordsPlayer2
     self.coordsPuck = coordsPuck
     self.friction = friction
     self.borderX = borderX
@@ -18,6 +16,7 @@ class DynamicsHandler:
     self.lock = Lock()
     self.doPlayer1Collide = True
     self.doPlayer2Collide = True
+    self.doFriction = False
     self.bounce1 = False
     self.bounce2 = False
   
@@ -35,8 +34,6 @@ class DynamicsHandler:
     self.doPlayer2Collide = player2
 
   def updatePlayerCoords(self, coordsPlayer1, coordsPlayer2):
-    self.prevCoordsPlayer1 = self.coordsPlayer1
-    self.prevCoordsPlayer2 = self.coordsPlayer2
     self.coordsPlayer1 = coordsPlayer1
     self.coordsPlayer2 = coordsPlayer2
 
@@ -46,10 +43,11 @@ class DynamicsHandler:
       currTime = time.time()
       timeDiff = currTime - self.prevTime
       self.prevTime = currTime
-      puckSpeed = self.coordsPuck[2] # in px/s
-      puckAngle = self.coordsPuck[3] # in rad
-      puckCoords = self.coordsPuck[0]
-      puckSize = self.coordsPuck[1]
+      with self.lock:
+        puckSpeed = self.coordsPuck[2] # in px/s
+        puckAngle = self.coordsPuck[3] # in rad
+        puckCoords = self.coordsPuck[0]
+        puckSize = self.coordsPuck[1]
 
       # Calculate the new Puck Coords
       newPuckCoords = [puckCoords[0] + puckSpeed*timeDiff * np.cos(puckAngle), puckCoords[1] + puckSpeed*timeDiff * np.sin(puckAngle)]
@@ -77,7 +75,7 @@ class DynamicsHandler:
 
       if self.doPlayer1Collide:
         # Calculate the new Puck Angle on bounce with player 1 position and angle, considering the puck size
-        # TODO: Solve collision issue when ball is behind player
+        # TODO: Solve collision issue (collision is sometimes not detected)
         player1StartCoord = self.coordsPlayer1[0]
         player1Angle = self.coordsPlayer1[1]
         x1 = int(player1StartCoord[0] + self.coordsPlayer1[2] * np.cos(player1Angle))
@@ -99,11 +97,11 @@ class DynamicsHandler:
           print("Player 1 Collision End")
           self.bounce1 = False
 
-        # TODO: Calculate the new Puck Speed
+        # TODO:[Future version] Calculate the new Puck Speed (considering the player speed)
 
       if self.doPlayer2Collide:
         # Calculate the new Puck Angle on bounce with player 2 position and angle, considering the puck size
-        # TODO: Solve collision issue when ball is behind player
+        # TODO: Solve collision issue (collision is sometimes not detected)
         player2StartCoord = self.coordsPlayer2[0]
         player2Angle = self.coordsPlayer2[1]
         x2 = int(player2StartCoord[0] - self.coordsPlayer2[2] * np.cos(player2Angle))
@@ -123,8 +121,11 @@ class DynamicsHandler:
         elif dist > puckSize and self.bounce2:
           self.bounce2 = False
 
-        # TODO: Calculate the new Puck Speed
+        # TODO:[Future version] Calculate the new Puck Speed
 
+      if self.doFriction:
+        # TODO:[Future version] Calculate the new Puck Speed with friction
+        pass
       # Update the puck coords, speed and angle
       with self.lock:
         self.coordsPuck[0] = newPuckCoords
@@ -134,8 +135,9 @@ class DynamicsHandler:
 
   def getPuckCoords(self):
     # convert the coords to int
-    puckCoords = [int(self.coordsPuck[0][0]), int(self.coordsPuck[0][1])]
-    return [puckCoords, self.coordsPuck[1], self.coordsPuck[2], self.coordsPuck[3]]
+    with self.lock:
+      puckCoords = [int(self.coordsPuck[0][0]), int(self.coordsPuck[0][1])]
+      return [puckCoords, self.coordsPuck[1], self.coordsPuck[2], self.coordsPuck[3]]
 
 
 if __name__ == "__main__":
