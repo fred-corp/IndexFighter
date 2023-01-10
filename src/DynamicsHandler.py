@@ -52,10 +52,7 @@ class DynamicsHandler:
       # Calculate the new Puck Coords
       newPuckCoords = [puckCoords[0] + puckSpeed*timeDiff * np.cos(puckAngle), puckCoords[1] + puckSpeed*timeDiff * np.sin(puckAngle)]
       
-      # Calculate the new Puck Speed with time difference and friction
-      puckSpeed /= self.friction ## timeDiff
-      if puckSpeed < 1:
-        puckSpeed = 0
+      
 
       # Calculate the new Puck Angle on bounce with border, considering the puck size
       if newPuckCoords[0] - puckSize < self.borderX or newPuckCoords[0] + puckSize > self.fieldShape[1] - self.borderX:
@@ -125,7 +122,10 @@ class DynamicsHandler:
 
       if self.doFriction:
         # TODO:[Future version] Calculate the new Puck Speed with friction
-        pass
+        # Calculate the new Puck Speed with time difference and friction
+        puckSpeed /= self.friction ## timeDiff
+        if puckSpeed < 1:
+          puckSpeed = 0
       # Update the puck coords, speed and angle
       with self.lock:
         self.coordsPuck[0] = newPuckCoords
