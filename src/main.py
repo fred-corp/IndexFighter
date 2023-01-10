@@ -17,7 +17,7 @@ def startGame(debug=0):
   goalHeight = 300
   fieldShape = (720, 1280)
   coordsPuck = [[640, 360], 20, 0, np.pi/4]
-  startDelay = 30
+  startDelay = 5
 
   camHandler = CameraHandler(fieldShape)
   camHandler.start()
@@ -54,6 +54,12 @@ def startGame(debug=0):
       dynamicsHandler.stop()
       cv2.destroyAllWindows()
       break
+    if cv2.waitKey(1) & 0xFF == ord('r'):
+      player1.score = 0
+      player2.score = 0
+      started = False
+      time0 = time.time()
+      dynamicsHandler.setPuckCoords([[640, 360], 20, 0, np.pi/4])
 
 
 
